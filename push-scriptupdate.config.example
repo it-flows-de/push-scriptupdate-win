@@ -1,0 +1,58 @@
+#===============================================================================
+# push-scriptupdate.config - configuration for push-scriptupdate.ps1
+# Setup:  Copy-Item push-scriptupdate.config.example push-scriptupdate.config,
+#         then edit it with an editor of your choice.
+# Syntax: PowerShell data file: Key = 'value' inside the @{ } block. ASCII only.
+#         No variables possible.
+# Rights: only you, SYSTEM and Administrators may be able to write this file.
+# No secrets here. The file stays on the development PC and is never committed.
+#===============================================================================
+@{
+    # Config format version. Must match the script, otherwise it aborts (exit code 3).
+    # Do not change by hand; adjust it only after following the release notes.
+    ConfigVersion = 1
+
+    #===========================================================================
+    # 1. REQUIRED - set these for every project
+    #===========================================================================
+
+    # GithubOrg: GitHub organisation that holds all script repos (public).
+    # Format: organisation name. Example: 'it-flows-de'
+    GithubOrg = 'it-flows-de'
+
+    #===========================================================================
+    # 2. OPTIONAL - empty means "not used"
+    #===========================================================================
+
+    # CustomerPatterns: array of words that must never appear in repo files
+    # (customer names, host names, IPs). The files are searched case-insensitively
+    # before every release. Empty array = check skipped.
+    # Format: @('word1', 'word2') - separated by commas, not by spaces.
+    # ASCII only: for a word with an umlaut use the part without it.
+    # Example: @('customer-a', 'srv-customer-b', '192.0.2.10')
+    CustomerPatterns = @()
+
+    #===========================================================================
+    # 3. DEFAULTS - change only in individual cases
+    #===========================================================================
+
+    # DefaultBranch: branch used for new repos and expected for existing ones.
+    # If the local branch or the GitHub default branch of an existing repo differs,
+    # the script shows the branches on GitHub and asks which one to use. Default: 'main'
+    DefaultBranch = 'main'
+
+    # RemoteUrlTemplate: SSH remote of a script repo. {org} is replaced by GithubOrg,
+    # {name} by the repo name. The repo is named like the script, optionally with a
+    # suffix (for example 'push-scriptupdate-win'). For a new repo the script asks for
+    # the name, for an existing repo it is taken from 'origin'.
+    # Default: 'git@github.com:{org}/{name}.git'
+    RemoteUrlTemplate = 'git@github.com:{org}/{name}.git'
+
+    # MinGitVersion: minimum git version (SSH signatures need 2.34). Default: '2.34'
+    MinGitVersion = '2.34'
+
+    # CommitMailDomain: the git commit mail must end with @<this value>, because
+    # the mail is public in the history. Empty = check skipped.
+    # Default: 'users.noreply.github.com'
+    CommitMailDomain = 'users.noreply.github.com'
+}
